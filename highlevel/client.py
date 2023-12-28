@@ -91,7 +91,7 @@ class Client(object):
         return self.parse(response)
 
     def list_connections(self, page: Optional[int] = None) -> Optional[Union[str, None]]:
-        """Retrieves a list of contacts.
+        """Retrieves a list of connections.
 
         Args:
             page (int, optional): Page number. Defaults to None.
@@ -105,6 +105,118 @@ class Client(object):
         response = requests.get(self.URL + url_text, headers=self.headers)
         return self.parse(response)
 
+    def get_contact(self, get_payload: dict, identifier: str, page: Optional[int] = None) -> Optional[Union[str, None]]:
+        """Retrieves a contact.
+
+        Args:
+            page (int, optional): Page number. Defaults to None.
+
+        Returns:
+            Optional[Union[str, None]]: Connection list if available, otherwise None.
+        """
+
+        url_text = 'api/contacts'
+        response = requests.get(
+            self.URL + url_text,
+            data=get_payload,
+            headers=self.headers
+        )
+        return self.parse(response)
+    
+    def create_contact(
+            self,
+            payload: dict
+        ) -> Optional[Union[str, None]]:
+        """Creates a contact.
+
+        Args:
+            payload (dict): Payload with contact info.
+
+        Returns:
+            Optional[Union[str, None]]: Contact list if available, otherwise None.
+        """
+
+        url_text = 'api/contacts'
+        response = requests.post(
+            self.URL + url_text,
+            data=payload,
+            headers=self.headers,
+        )
+        return self.parse(response)
+    
+    def create_opportunity(
+            self,
+            payload: dict
+        ) -> Optional[Union[str, None]]:
+        """Creates a contact.
+
+        Args:
+            payload (dict): Payload with opportunity info.
+
+        Returns:
+            Optional[Union[str, None]]: Opportunity list if available, otherwise None.
+        """
+
+        url_text = 'api/opportunities'
+        response = requests.post(
+            self.URL + url_text,
+            data=payload,
+            headers=self.headers,
+        )
+        return self.parse(response)
+    
+    def create_task(
+            self,
+            payload: dict,
+            contact: any
+        ) -> Optional[Union[str, None]]:
+        """Creates a task based on specific contact.
+
+        Args:
+            payload (dict): Payload with contact info.
+
+        Returns:
+            Optional[Union[str, None]]: Contact list if available, otherwise None.
+        """
+
+        contact: any = self.get_contact(identifier=contact)
+        payload['contact']: str = contact
+        url_text = 'api/contacts'
+
+        response = requests.post(
+            self.URL + url_text,
+            data=payload,
+            headers=self.headers,
+        )
+        return self.parse(response)
+    
+
+    def add_contact_to_campaign(
+            self,
+            payload: dict,
+            campaign_id: int
+        ) -> Optional[Union[str, None]]:
+        """Creates a campaign related connection.
+
+        Args:
+            payload (dict): Payload with campaign info.
+
+        Returns:
+            Optional[Union[str, None]]: Contact list if available, otherwise None.
+        """
+
+        contact: any = self.get_contact(identifier=contact)
+        payload['campaign_id']: int = campaign_id
+        url_text = 'api/campaigns'
+        
+        response = requests.post(
+            self.URL + url_text,
+            data=payload,
+            headers=self.headers,
+        )
+        return self.parse(response)
+    
+    
     def parse(self, response: requests.Response) -> Union[str, None]:
         """Parses the HTTP response and handles different status codes.
 
