@@ -15,17 +15,25 @@ class Client(object):
     TOKEN_URL: str = "https://api.highlevel.com/oauth/token"
     headers: Dict[str, str] = {"Content-Type": "application/json", "Accept": "application/json"}
 
-    def __init__(self, client_id: Optional[str] = None, client_secret: Optional[str] = None, redirect_uri: Optional[str] = None) -> None:
+    def __init__(
+            self,
+            client_id: Optional[str] = None,
+            client_secret: Optional[str] = None,
+            redirect_uri: Optional[str] = None,
+            scope: Optional[str] = None
+        ) -> None:
         """Initializes the Client class.
 
         Args:
-            client_id (str, optional): Client ID. Defaults to None.
+            client_id (str, optional): Client ID from HighLevel. Defaults to None.
             client_secret (str, optional): Client secret key. Defaults to None.
             redirect_uri (str, optional): Redirect URI. Defaults to None.
         """
+
         self.CLIENT_ID: Optional[str] = client_id
         self.CLIENT_SECRET: Optional[str] = client_secret
         self.REDIRECT_URI: Optional[str] = redirect_uri
+        self.SCOPE: Optional[str] = scope
         self.TOKEN: Optional[Dict[str, Any]] = None
 
     def authorization_url(self, state: Optional[str] = None) -> str:
@@ -40,6 +48,7 @@ class Client(object):
         params: Dict[str, Optional[str]] = {
             "client_id": self.CLIENT_ID,
             "redirect_uri": self.REDIRECT_URI,
+            "scope": self.SCOPE,
             "response_type": "code",
             "state": state,
         }
