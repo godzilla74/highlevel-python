@@ -6,7 +6,7 @@ from typing import Optional, Union, Dict, Any
 from highlevel.exceptions import UnauthorizedError, WrongFormatInputError
 
 
-class HighLevelClient:
+class Client:
     BASE_URL = "https://api.highlevel.com/"
     AUTH_URL = "https://api.highlevel.com/oauth/authorize"
     TOKEN_URL = "https://api.highlevel.com/oauth/token"
