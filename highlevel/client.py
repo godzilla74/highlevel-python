@@ -119,3 +119,7 @@ class Client:
         payload["campaign_id"] = campaign_id
         endpoint = "api/campaigns"
         return self._request("POST", endpoint, data=payload)
+    
+    def upload_to_media_library(self, payload: dict) -> Optional[Union[str, None]]:
+        endpoint = "medias/upload-file"
+        return self._request("POST", endpoint, data=payload)

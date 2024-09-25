@@ -6,7 +6,7 @@
 This library uses Oauth2 for authentication.
 ## Installing
 ```
-pip install highlevel-python
+pip install git+https://github.com/godzilla74/highlevel-python.git
 ```
 ### Usage
 ```python
