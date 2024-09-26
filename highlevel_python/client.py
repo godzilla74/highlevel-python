@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 from requests_oauthlib import OAuth2Session
 from typing import Optional, Union, Dict, Any
 
-from highlevel.exceptions import UnauthorizedError, WrongFormatInputError
+from highlevel_python.exceptions import UnauthorizedError, WrongFormatInputError
 
 
 class Client:
