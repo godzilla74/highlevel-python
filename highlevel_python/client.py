@@ -8,9 +8,9 @@ from highlevel_python.exceptions import UnauthorizedError, WrongFormatInputError
 
 
 class Client:
-    BASE_URL = "https://api.highlevel.com/"
-    AUTH_URL = "https://api.highlevel.com/oauth/authorize"
-    TOKEN_URL = "https://api.highlevel.com/oauth/token"
+    BASE_URL = "https://services.leadconnectorhq.com/"
+    AUTH_URL = "https://services.leadconnectorhq.com/oauth/authorize"
+    TOKEN_URL = "https://services.leadconnectorhq.com/oauth/token"
     HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
 
     def __init__(
