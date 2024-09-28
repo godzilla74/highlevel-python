@@ -124,10 +124,18 @@ class Client:
     def upload_to_media_library(self, file_path: str) -> Optional[Union[str, None]]:
         endpoint = "medias/upload-file"
         url = self.BASE_URL + endpoint
-        headers = self.headers
+
+        # Set up the headers with the Authorization token
+        # need form/multipart here, so override the original
+        headers = {"Authorization": f"Bearer {self.token['access_token']}"}
+
+        # Prepare the file for upload as multipart form data
         with open(file_path, 'rb') as file:
             files = {
-                "file": (os.path.basename(file_path), file, "image/gif")
+                "file": (os.path.basename(file_path), file)
             }
+            # Perform the request to upload the file
             response = requests.post(url, headers=headers, files=files)
+
+        # Handle the response to make sure it's processed correctly
         return self._handle_response(response)
