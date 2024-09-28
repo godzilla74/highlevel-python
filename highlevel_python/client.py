@@ -1,4 +1,5 @@
 import requests
+import os
 from urllib.parse import urlencode
 from requests_oauthlib import OAuth2Session
 from typing import Optional, Union, Dict, Any
@@ -120,6 +121,13 @@ class Client:
         endpoint = "api/campaigns"
         return self._request("POST", endpoint, data=payload)
     
-    def upload_to_media_library(self, payload: dict) -> Optional[Union[str, None]]:
+    def upload_to_media_library(self, file_path: str) -> Optional[Union[str, None]]:
         endpoint = "medias/upload-file"
-        return self._request("POST", endpoint, data=payload)
+        url = self.BASE_URL + endpoint
+        headers = self.headers
+        with open(file_path, 'rb') as file:
+            files = {
+                "file": (os.path.basename(file_path), file, "image/gif")
+            }
+            response = requests.post(url, headers=headers, files=files)
+        return self._handle_response(response)
