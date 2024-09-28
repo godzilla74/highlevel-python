@@ -9,7 +9,7 @@ from highlevel_python.exceptions import UnauthorizedError, WrongFormatInputError
 
 class Client:
     BASE_URL = "https://services.leadconnectorhq.com/"
-    AUTH_URL = "https://services.leadconnectorhq.com/oauth/authorize"
+    AUTH_URL = "https://marketplace.leadconnectorhq.com/oauth/chooselocation"
     TOKEN_URL = "https://services.leadconnectorhq.com/oauth/token"
     HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
 
@@ -44,22 +44,35 @@ class Client:
         return self.AUTH_URL + "?" + urlencode(params)
 
     def get_access_token(self, code: str) -> Dict[str, Any]:
-        oauth_session = OAuth2Session(self.client_id, redirect_uri=self.redirect_uri)
-        self.token = oauth_session.fetch_token(
-            self.TOKEN_URL, code=code, client_secret=self.client_secret
-        )
-        return self.token
+        data = {
+            "grant_type": "authorization_code",
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "redirect_uri": self.redirect_uri,
+            "code": code,
+        }
+        response = requests.post(self.TOKEN_URL, headers=self.HEADERS, json=data)
+
+        if response.status_code == 200:
+            self.token = response.json()
+            return self.token
+        else:
+            raise UnauthorizedError(f"Error fetching access token: {response.text}")
 
     def refresh_access_token(self, refresh_token: str) -> Dict[str, Any]:
-        oauth_session = OAuth2Session(
-            self.client_id,
-            redirect_uri=self.redirect_uri,
-            token={"refresh_token": refresh_token},
-        )
-        self.token = oauth_session.refresh_token(
-            self.TOKEN_URL, client_id=self.client_id, client_secret=self.client_secret
-        )
-        return self.token
+        data = {
+            "grant_type": "refresh_token",
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "refresh_token": refresh_token,
+        }
+        response = requests.post(self.TOKEN_URL, headers=self.HEADERS, json=data)
+
+        if response.status_code == 200:
+            self.token = response.json()
+            return self.token
+        else:
+            raise UnauthorizedError(f"Error refreshing access token: {response.text}")
 
     def set_token(self, token: Dict[str, Any]) -> None:
         self.token = token
